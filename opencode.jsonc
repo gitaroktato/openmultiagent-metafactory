@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "{env:OPENCODE_MODEL}",
+  "experimental": {
+    "openTelemetry": true
+  },
+  "plugin": [
+    "@devtheops/opencode-plugin-otel"
+  ],
+  "mcp": {
+    "backlog": {
+      "type": "local",
+      "command": [
+        "backlog",
+        "mcp",
+        "start"
+      ],
+      "environment": {
+        "BACKLOG_CWD": ".backlog/"
+      }
+    }
+  }
+}
