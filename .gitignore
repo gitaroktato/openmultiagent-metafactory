@@ -1,0 +1,5 @@
+node_modules/
+.env
+dashboard.html
+.agent-workspace/
+reports/

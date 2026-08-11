@@ -1,0 +1,19 @@
+{
+  "name": "oma-metafactory",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "demo": "tsx src/index.ts --demo"
+  },
+  "dependencies": {
+    "@open-multi-agent/core": "1.15.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  }
+}
