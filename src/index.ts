@@ -1,9 +1,16 @@
+import { argv } from 'process';
 import { BatchingTraceSink, CoordinatorConfig, InMemoryTraceStore, LLMAdapter, LLMChatOptions, LLMMessage, LLMResponse, LLMStreamOptions, ModelRoutingPolicy, OpenMultiAgent, OrchestratorConfig, OrchestratorEvent, renderRunViewer, RunResult, RunTeamOptions, StoredRun, StreamEvent, TraceStoreExporter } from '@open-multi-agent/core'
 import { ExternalAgentBackendConfig } from '@open-multi-agent/core'
 import { writeFileSync } from 'node:fs'
 import { handleProgress } from './logger'
 import { createAcpBackend } from '@open-multi-agent/core/acp'
 import { ContentBlock } from '@agentclientprotocol/sdk/experimental/v2'
+
+function getGoalFromArgs() {
+  const goalArg = argv.find(arg => arg.startsWith('--goal='));
+  const goal = goalArg ? goalArg.split('=')[1] : 'Default goal';
+  return goal;
+}
 
 // Required to have trace on dashboards
 const store = new InMemoryTraceStore()
@@ -79,7 +86,11 @@ const coordinatorConfig: CoordinatorConfig = {
 
 // Configuring team
 const runTeamOptions: RunTeamOptions = { revealCoordinator: true, mode: 'team', coordinator: coordinatorConfig }
-const result = await oma.runTeam(team, 'Add a slugify() utility with tests, then review it.', runTeamOptions)
+
+// Parse goal from command line argument
+const goal = getGoalFromArgs();
+console.log(`Executing goal - ${goal}`)
+const result = await oma.runTeam(team, goal, runTeamOptions)
 console.log(`\nRouting decision - ${JSON.stringify(result.routingDecision, null, 2)}`)
 
 // Flushing traces
@@ -88,3 +99,4 @@ const run: StoredRun | undefined = (await store.getRun(result.identity!.runId, {
 
 writeFileSync('dashboard.html', renderRunViewer({ result, run }))
 console.log(`\nDAG dashboard → dashboard.html`)
+
