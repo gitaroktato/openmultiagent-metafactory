@@ -2,7 +2,7 @@ project_name: "Open Metadata-Agent Metafactory"
 default_status: "To Do"
 statuses: ["To Do", "In Progress", "Done"]
 labels: []
-definition_of_done: []
+definition_of_done: ["All unit tests pass", "Unit test coverage stays above 80%", "The `knip` linter shows no errors or issues to fix", "README.md documentation is updated"]
 date_format: yyyy-mm-dd
 max_column_width: 20
 default_editor: "nvim"
