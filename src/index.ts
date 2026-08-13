@@ -4,11 +4,11 @@ import { ExternalAgentBackendConfig } from '@open-multi-agent/core'
 import { writeFileSync } from 'node:fs'
 import { handleProgress } from './logger'
 import { createAcpBackend } from '@open-multi-agent/core/acp'
-import { ContentBlock } from '@agentclientprotocol/sdk/experimental/v2'
 
 function getGoalFromArgs() {
   const goalArg = argv.find(arg => arg.startsWith('--goal='));
-  const goal = goalArg ? goalArg.split('=')[1] : 'Default goal';
+  const goal = goalArg ? goalArg.split('=')[1] : undefined;
+  if (!goal) { throw new Error("Goal parameter is required. Please provide one using --goal=<your goal>."); }
   return goal;
 }
 

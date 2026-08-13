@@ -22,3 +22,4 @@ For an Ollama scaffold, start Ollama first and run `npm run dev`. The starter se
 - <https://github.com/MrLesk/Backlog.md>
 - <https://www.skills.sh>
 - <https://arize.com/docs/phoenix/>
+- <https://knip.dev>
