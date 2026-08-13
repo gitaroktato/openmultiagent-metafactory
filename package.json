@@ -8,13 +8,16 @@
   },
   "scripts": {
     "dev": "tsx src/index.ts",
-    "demo": "tsx src/index.ts --demo"
+    "demo": "tsx src/index.ts --demo",
+    "knip": "knip"
   },
   "dependencies": {
-    "@open-multi-agent/core": "1.15.0",
-    "@types/node": "^26.2.0"
+    "@open-multi-agent/core": "1.15.0"
   },
   "devDependencies": {
-    "tsx": "^4.21.0"
+    "@types/node": "^26.2.0",
+    "knip": "^6.32.2",
+    "tsx": "^4.21.0",
+    "typescript": "^7.0.2"
   }
 }
