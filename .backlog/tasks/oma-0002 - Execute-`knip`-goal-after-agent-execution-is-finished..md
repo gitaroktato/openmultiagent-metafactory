@@ -1,16 +1,16 @@
 ---
 id: OMA-0002
 title: Execute `knip` goal after agent execution is finished.
-status: Done
+status: In Progress
 assignee: []
 created_date: '2026-08-13 13:58'
-updated_date: '2026-08-13 14:21'
+updated_date: '2026-08-14 08:38'
 labels: []
 dependencies: []
 modified_files:
   - src/index.ts
 type: feature
-ordinal: 2000
+ordinal: 1000
 ---
 
 ## Description

@@ -5,6 +5,11 @@ import { ExternalAgentBackendConfig } from '@open-multi-agent/core'
 import { writeFileSync } from 'node:fs'
 import { handleProgress } from './logger'
 import { createAcpBackend } from '@open-multi-agent/core/acp'
+import { NodeTracerProvider, register, traceChain } from '@arizeai/phoenix-otel';
+
+// Phoenix OTEL configuration
+const provider: NodeTracerProvider = register({ projectName: "default", url: "http://localhost:6006" });
+const CURRENT_SESSION_ID = "factory-01"
 
 const KNIP_MAX_RETRIES = 3;
 
@@ -14,6 +19,9 @@ function runKnip(): { clean: boolean; output: string } {
   const clean = result.status === 0;
   return { clean, output };
 }
+
+// Set up tracing for Knip
+const runKnipWithTrace = traceChain(runKnip, { attributes: { "session.id": CURRENT_SESSION_ID } })
 
 function getGoalFromArgs() {
   const goalArg = argv.find(arg => arg.startsWith('--goal='));
@@ -46,7 +54,7 @@ const backend: ExternalAgentBackendConfig = {
     "OPENCODE_OTLP_PROTOCOL": "grpc",
     "OPENCODE_OTLP_HEADERS": "x-project-name=default",
     // Example of controlling sessionID and userID for ACP delegated calls
-    "OPENCODE_SPAN_ATTRIBUTES": "session.id=slugify-03,user.id=gitaroktato"
+    "OPENCODE_SPAN_ATTRIBUTES": `session.id=${CURRENT_SESSION_ID},user.id=gitaroktato`
   },
   args: ['acp', '--print-logs'],
   permission: 'auto-approve'
@@ -110,7 +118,7 @@ try {
     console.log(`\nRunning knip (attempt ${knipRetries + 1}/${KNIP_MAX_RETRIES})...`);
     let knip: { clean: boolean; output: string };
     try {
-      knip = runKnip();
+      knip = runKnipWithTrace();
     } catch (err) {
       console.error('knip: failed to run (binary missing or fatal error):', err);
       break;
