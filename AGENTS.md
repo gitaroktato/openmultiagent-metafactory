@@ -32,6 +32,8 @@ You MUST read the overview resource to understand the complete workflow. The inf
 
 ## Project Description
 
+A multi-agent orchestration demo built on `@open-multi-agent/core` (OMA). Given a `--goal` argument, a coordinator decomposes the goal into a task DAG and dispatches it to a hybrid team of three OpenCode-backed agents: **planner**, **coder**, and **reviewer**. Each agent runs as an ACP (Agent Communication Protocol) subprocess. After the team finishes, a Knip feedback loop checks for unused exports/imports and re-runs the team up to three times to fix any issues. All traces are captured via Arize Phoenix (OpenTelemetry) and a local HTML dashboard (`dashboard.html`) is rendered for every run. Session IDs are derived from Backlog.md task IDs embedded in the goal string.
+
 ## Testing
 
 Run all tests with the following command
