@@ -23,3 +23,17 @@ For an Ollama scaffold, start Ollama first and run `npm run dev`. The starter se
 - <https://www.skills.sh>
 - <https://arize.com/docs/phoenix/>
 - <https://knip.dev>
+
+## How to use?
+
+### Opening the backlog
+
+```bash
+backlog browser
+```
+
+### Implementing a backlog item
+
+```bash
+npm run dev -- --goal='Implement oma-0002
+```
