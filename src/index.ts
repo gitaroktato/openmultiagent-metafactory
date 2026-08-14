@@ -1,14 +1,14 @@
 import { argv } from 'process';
 import { spawnSync } from 'node:child_process';
-import { BatchingTraceSink, CoordinatorConfig, InMemoryTraceStore, LLMAdapter, LLMChatOptions, LLMMessage, LLMResponse, LLMStreamOptions, ModelRoutingPolicy, OpenMultiAgent, OrchestratorConfig, OrchestratorEvent, renderRunViewer, RunResult, RunTeamOptions, StoredRun, StreamEvent, TraceStoreExporter } from '@open-multi-agent/core'
+import { BatchingTraceSink, CoordinatorConfig, InMemoryTraceStore, LLMAdapter, LLMChatOptions, LLMMessage, LLMResponse, LLMStreamOptions, OpenMultiAgent, OrchestratorConfig, renderRunViewer, RunResult, RunTeamOptions, StoredRun, StreamEvent, TraceStoreExporter } from '@open-multi-agent/core'
 import { ExternalAgentBackendConfig } from '@open-multi-agent/core'
 import { writeFileSync } from 'node:fs'
 import { handleProgress } from './logger'
 import { createAcpBackend } from '@open-multi-agent/core/acp'
-import { NodeTracerProvider, register, traceChain } from '@arizeai/phoenix-otel';
+import { register, traceChain } from '@arizeai/phoenix-otel';
 
 // Phoenix OTEL configuration
-const provider: NodeTracerProvider = register({ projectName: "default", url: "http://localhost:6006" });
+register({ projectName: "default", url: "http://localhost:6006" });
 const CURRENT_SESSION_ID = "factory-01"
 
 const KNIP_MAX_RETRIES = 3;
