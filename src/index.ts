@@ -6,10 +6,21 @@ import { writeFileSync } from 'node:fs'
 import { handleProgress } from './logger'
 import { createAcpBackend } from '@open-multi-agent/core/acp'
 import { register, traceChain } from '@arizeai/phoenix-otel';
+import { createSessionId, extractBacklogId } from './session'
 
 // Phoenix OTEL configuration
 register({ projectName: "default", url: "http://localhost:6006" });
-const CURRENT_SESSION_ID = "factory-01"
+
+function getGoalFromArgs() {
+  const goalArg = argv.find(arg => arg.startsWith('--goal='));
+  const goal = goalArg ? goalArg.split('=')[1] : undefined;
+  if (!goal) { throw new Error("Goal parameter is required. Please provide one using --goal=<your goal>."); }
+  return goal;
+}
+
+// Parse goal and derive session ID before anything else uses them
+const goal = getGoalFromArgs();
+const CURRENT_SESSION_ID = createSessionId(extractBacklogId(goal));
 
 const KNIP_MAX_RETRIES = 3;
 
@@ -22,13 +33,6 @@ function runKnip(): { clean: boolean; output: string } {
 
 // Set up tracing for Knip
 const runKnipWithTrace = traceChain(runKnip, { attributes: { "session.id": CURRENT_SESSION_ID } })
-
-function getGoalFromArgs() {
-  const goalArg = argv.find(arg => arg.startsWith('--goal='));
-  const goal = goalArg ? goalArg.split('=')[1] : undefined;
-  if (!goal) { throw new Error("Goal parameter is required. Please provide one using --goal=<your goal>."); }
-  return goal;
-}
 
 // Required to have trace on dashboards
 const store = new InMemoryTraceStore()
@@ -105,8 +109,6 @@ const coordinatorConfig: CoordinatorConfig = {
 // Configuring team
 const runTeamOptions: RunTeamOptions = { revealCoordinator: true, mode: 'team', coordinator: coordinatorConfig }
 
-// Parse goal from command line argument
-const goal = getGoalFromArgs();
 console.log(`Executing goal - ${goal}`)
 let result = await oma.runTeam(team, goal, runTeamOptions)
 console.log(`\nRouting decision - ${JSON.stringify(result.routingDecision, null, 2)}`)
@@ -145,4 +147,3 @@ try {
   writeFileSync('dashboard.html', renderRunViewer({ result, run }))
   console.log(`\nDAG dashboard → dashboard.html`)
 }
-

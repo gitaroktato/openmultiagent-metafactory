@@ -18,6 +18,7 @@ This project uses Backlog.md MCP for all task and project management activities.
 - **When to read it**: BEFORE creating tasks, or when you're unsure whether to track work
 
 These guides cover:
+
 - Decision framework for when to create tasks
 - Search-first workflow to avoid duplicates
 - Links to detailed guides for task creation, execution, and finalization
@@ -28,3 +29,13 @@ You MUST read the overview resource to understand the complete workflow. The inf
 </CRITICAL_INSTRUCTION>
 
 <!-- BACKLOG.MD MCP GUIDELINES END -->
+
+## Project Description
+
+## Testing
+
+Run all tests with the following command
+
+```bash
+npm test 
+```

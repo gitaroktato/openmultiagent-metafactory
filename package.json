@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "demo": "tsx src/index.ts --demo",
+    "test": "node --import tsx/esm --test src/**/*.test.ts",
     "knip": "knip"
   },
   "dependencies": {

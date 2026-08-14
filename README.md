@@ -37,3 +37,19 @@ backlog browser
 ```bash
 npm run dev -- --goal='Implement oma-0002
 ```
+
+## Session IDs
+
+Each run generates a unique session ID that is used for tracing and observability.
+
+- When the `--goal` argument references a backlog task ID (e.g. `oma-0003`), the session ID is prefixed with that ID:
+  ```
+  oma-0003_00483fd3fffeimpuP4sriCWYXb
+  ```
+- When no backlog ID is found in the goal, a plain random token is used:
+  ```
+  00483fd3fffeimpuP4sriCWYXb
+  ```
+
+The session ID is attached to all OpenTelemetry spans as `session.id` and propagated to child agents via `OPENCODE_SPAN_ATTRIBUTES`.
+
