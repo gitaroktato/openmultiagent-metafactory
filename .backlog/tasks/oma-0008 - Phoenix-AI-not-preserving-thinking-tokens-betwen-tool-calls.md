@@ -1,16 +1,21 @@
 ---
-id: OMA-0004
-title: Add a refactor goal that's fed back to the agent
+id: OMA-0008
+title: Phoenix AI not preserving thinking tokens betwen tool calls
 status: To Do
 assignee: []
-created_date: '2026-08-14 07:37'
-updated_date: '2026-08-14 09:22'
+created_date: '2026-08-14 09:26'
 labels: []
 milestone: m-0
 dependencies: []
-type: feature
-ordinal: 4000
+type: bug
+ordinal: 8000
 ---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Maybe OpenCode issue, not sure
+<!-- SECTION:DESCRIPTION:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->

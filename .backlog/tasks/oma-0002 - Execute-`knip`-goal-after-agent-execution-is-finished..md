@@ -4,8 +4,9 @@ title: Execute `knip` goal after agent execution is finished.
 status: In Progress
 assignee: []
 created_date: '2026-08-13 13:58'
-updated_date: '2026-08-14 08:38'
+updated_date: '2026-08-14 09:22'
 labels: []
+milestone: m-0
 dependencies: []
 modified_files:
   - src/index.ts

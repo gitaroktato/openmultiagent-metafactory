@@ -1,21 +1,25 @@
 ---
-id: OMA-0005
-title: Switch to bun executable
+id: OMA-0006
+title: Enhance implementation with Vercel AI skills
 status: To Do
 assignee: []
-created_date: '2026-08-14 07:58'
-updated_date: '2026-08-14 09:22'
+created_date: '2026-08-14 09:20'
+updated_date: '2026-08-14 09:23'
 labels: []
 milestone: m-0
 dependencies: []
 type: enhancement
-ordinal: 5000
+ordinal: 6000
 ---
 
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-https://vercel.com/academy/build-ai-agent-harness/verification-contract
+**Options**
+
+https://vercel.com/docs/agent-resources/skills#ai-sdk
+https://vercel.com/docs/agent-resources/vercel-plugin
+https://vercel.com/docs/agent-resources/vercel-mcp/tools
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Definition of Done
