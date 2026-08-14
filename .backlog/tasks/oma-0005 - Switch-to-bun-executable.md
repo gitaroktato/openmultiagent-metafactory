@@ -1,15 +1,20 @@
 ---
-id: OMA-0004
-title: Add a refactor goal that's fed back to the agent
+id: OMA-0005
+title: Switch to bun executable
 status: To Do
 assignee: []
-created_date: '2026-08-14 07:37'
-updated_date: '2026-08-14 07:58'
+created_date: '2026-08-14 07:58'
 labels: []
 dependencies: []
-type: feature
-ordinal: 4000
+type: enhancement
+ordinal: 5000
 ---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+https://vercel.com/academy/build-ai-agent-harness/verification-contract
+<!-- SECTION:DESCRIPTION:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
