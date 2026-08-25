@@ -7,7 +7,7 @@ export function createAcpBackendConfig(sessionId: string): ExternalAgentBackendC
     kind: 'acp',
     command: 'opencode',
     env: {
-      "OPENCODE_MODEL": "unsloth-studio/unsloth/Qwen3.8-27B-GGUF",
+      "OPENCODE_MODEL": "unsloth-studio/unsloth/Qwen3.8-27B-GGUF#medium",
       "OPENCODE_ENABLE_TELEMETRY": "1",
       "OPENCODE_OTLP_ENDPOINT": "http://localhost:4317",
       "OPENCODE_OTLP_PROTOCOL": "grpc",

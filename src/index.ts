@@ -37,9 +37,10 @@ const runKnipWithTrace = traceChain(runKnip, { attributes: { "session.id": CURRE
 // Required to have trace on dashboards
 const store = new InMemoryTraceStore()
 const sink = new BatchingTraceSink(new TraceStoreExporter(store))
+// FIXME: Create a separate constant for consistency!
 const config: OrchestratorConfig = {
-  defaultModel: 'claude-sonnet-4.6',
-  defaultProvider: 'copilot',
+  defaultModel: 'Qwen3.8-27B-GGUF#medium',
+  defaultProvider: 'unsloth-studio',
   onProgress: handleProgress,
   observability: { sinks: [sink] },
   // Use deterministic strategy if no model available as router
