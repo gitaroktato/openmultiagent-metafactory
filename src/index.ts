@@ -52,7 +52,7 @@ const backend: ExternalAgentBackendConfig = {
   kind: 'acp',
   command: 'opencode',
   env: {
-    "OPENCODE_MODEL": "github-copilot/claude-sonnet-4.6",
+    "OPENCODE_MODEL": "unsloth-studio/unsloth/Qwen3.8-27B-GGUF",
     "OPENCODE_ENABLE_TELEMETRY": "1",
     "OPENCODE_OTLP_ENDPOINT": "http://localhost:4317",
     "OPENCODE_OTLP_PROTOCOL": "grpc",
