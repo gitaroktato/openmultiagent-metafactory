@@ -41,3 +41,7 @@ Run all tests with the following command
 ```bash
 npm test 
 ```
+
+## Folder forbidden for editing
+
+Never apply changes on the `node_modules` folder.
