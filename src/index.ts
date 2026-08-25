@@ -1,12 +1,12 @@
 import { argv } from 'process';
 import { spawnSync } from 'node:child_process';
 import { BatchingTraceSink, CoordinatorConfig, InMemoryTraceStore, LLMAdapter, LLMChatOptions, LLMMessage, LLMResponse, LLMStreamOptions, OpenMultiAgent, OrchestratorConfig, renderRunViewer, RunResult, RunTeamOptions, StoredRun, StreamEvent, TraceStoreExporter } from '@open-multi-agent/core'
-import { ExternalAgentBackendConfig } from '@open-multi-agent/core'
 import { writeFileSync } from 'node:fs'
 import { handleProgress } from './logger'
 import { createAcpBackend } from '@open-multi-agent/core/acp'
 import { register, traceChain } from '@arizeai/phoenix-otel';
 import { createSessionId, extractBacklogId } from './session'
+import { createAcpBackendConfig, createTeamConfig, TEAM_NAME } from './team'
 
 // Phoenix OTEL configuration
 register({ projectName: "default", url: "http://localhost:6006" });
@@ -47,36 +47,8 @@ const config: OrchestratorConfig = {
 }
 
 const oma = new OpenMultiAgent(config)
-
-const backend: ExternalAgentBackendConfig = {
-  kind: 'acp',
-  command: 'opencode',
-  env: {
-    "OPENCODE_MODEL": "unsloth-studio/unsloth/Qwen3.8-27B-GGUF",
-    "OPENCODE_ENABLE_TELEMETRY": "1",
-    "OPENCODE_OTLP_ENDPOINT": "http://localhost:4317",
-    "OPENCODE_OTLP_PROTOCOL": "grpc",
-    "OPENCODE_OTLP_HEADERS": "x-project-name=default",
-    // Example of controlling sessionID and userID for ACP delegated calls
-    "OPENCODE_SPAN_ATTRIBUTES": `session.id=${CURRENT_SESSION_ID},user.id=gitaroktato`
-  },
-  args: ['acp', '--print-logs'],
-  permission: 'auto-approve'
-}
-
-const team = oma.createTeam('hybrid-dev', {
-  name: 'hybrid-dev',
-  agents: [
-    { name: 'planner', systemPrompt: 'Break the task into a short plan. Do not write code.', backend: backend },
-    {
-      name: 'coder',
-      systemPrompt: 'Writes and edits code by running an external coding CLI.',
-      backend: backend,
-    },
-    { name: 'reviewer', systemPrompt: 'Review the change and summarize risks. Do not edit files.', backend: backend },
-  ],
-  sharedMemory: true,
-})
+const backend = createAcpBackendConfig(CURRENT_SESSION_ID)
+const team = oma.createTeam(TEAM_NAME, createTeamConfig(backend))
 
 // Create custom LLMAdapter as a coordinator
 const acpBackendInstance = createAcpBackend({ command: backend.command, args: backend.args, env: backend.env })

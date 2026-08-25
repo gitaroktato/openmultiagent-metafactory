@@ -17,6 +17,13 @@ For a Cloud scaffold, copy `.env.example` to `.env`, add the provider key, then 
 
 For an Ollama scaffold, start Ollama first and run `npm run dev`. The starter selects `OMA_MODEL` when set, otherwise the first installed model. No source files are read and agents receive no tools.
 
+## Team agents
+
+The `hybrid-dev` team is composed of three OpenCode-backed agents: **planner**, **coder**, and **typescript-reviewer**.
+
+- The **typescript-reviewer** is a TypeScript-specialized, read-only review agent. It never edits files and only produces review recommendations. Its system prompt instructs it to load the predefined `typescript-pro` skill (`.agents/skills/typescript-pro/SKILL.md`, auto-discovered by opencode ACP subprocesses — no config change needed) and apply its constraints when reviewing TypeScript code: strict mode, no explicit `any`, type guards, discriminated unions, branded types.
+- The coordinator routes only TypeScript-related goals/tasks to the **typescript-reviewer**. Non-TS goals receive no review step (there is no generic reviewer fallback).
+
 ## Technology Stack
 
 - <https://github.com/MrLesk/Backlog.md>
