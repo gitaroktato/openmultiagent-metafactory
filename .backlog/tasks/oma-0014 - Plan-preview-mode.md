@@ -1,21 +1,28 @@
 ---
-id: OMA-0010
-title: Integrate OpenHands
+id: OMA-0014
+title: Plan preview mode
 status: To Do
 assignee: []
-created_date: '2026-08-25 07:44'
-updated_date: '2026-08-25 09:38'
+created_date: '2026-08-25 09:37'
+updated_date: '2026-08-25 09:39'
 labels: []
 dependencies: []
 type: feature
-ordinal: 10000
+ordinal: 14000
 ---
 
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-https://www.openhands.dev/
-https://github.com/OpenHands/OpenHands
+Create a preview plan based on this documentation:
+
+https://open-multi-agent.com/reference/plan-replay/
+
+Steps to take:
+
+1. plan-only mode with orchestrator
+2. freeze the plan as tasks
+3. execute the tasks
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Definition of Done
