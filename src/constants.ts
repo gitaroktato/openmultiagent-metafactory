@@ -1,0 +1,5 @@
+export const DEFAULT_MODEL = 'Qwen3.8-27B-GGUF#medium'
+export const DEFAULT_PROVIDER = 'openai'
+export const OPENCODE_MODEL_ID = 'unsloth-studio/unsloth/Qwen3.8-27B-GGUF'
+export const PHOENIX_URL = 'http://localhost:6006'
+export const OTLP_ENDPOINT = 'http://localhost:4317'

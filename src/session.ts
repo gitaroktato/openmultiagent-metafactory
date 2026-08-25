@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { randomInt } from 'node:crypto';
 
 const BACKLOG_ID_PATTERN = /\b(oma-\d+)\b/i;
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -10,8 +10,7 @@ const TOKEN_LENGTH = 26;
  * keeping the `<backlogId>_<token>` format unambiguous.
  */
 function randomToken(): string {
-  const bytes = randomBytes(TOKEN_LENGTH);
-  return Array.from(bytes, b => ALPHABET[b % ALPHABET.length]).join('');
+  return Array.from({ length: TOKEN_LENGTH }, () => ALPHABET[randomInt(ALPHABET.length)]).join('');
 }
 
 /**
@@ -32,5 +31,5 @@ export function createSessionId(backlogId?: string): string {
  */
 export function extractBacklogId(goal: string): string | undefined {
   const match = goal.match(BACKLOG_ID_PATTERN);
-  return match ? match[1].toLowerCase() : undefined;
+  return match?.[1]?.toLowerCase();
 }

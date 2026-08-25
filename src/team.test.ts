@@ -9,6 +9,7 @@ describe('hybrid-dev team definition', () => {
   it('contains exactly one review agent with a TypeScript keyword in its name', () => {
     const reviewAgents = config.agents.filter(agent => typeof agent.name === 'string' && /review/i.test(agent.name));
     assert.equal(reviewAgents.length, 1, `expected exactly one review agent, got: ${config.agents.map(a => a.name).join(', ')}`);
+    assert.ok(reviewAgents[0], 'review agent must exist');
     assert.match(reviewAgents[0].name as string, /typescript/i, 'review agent name must carry TypeScript keywords');
   });
 

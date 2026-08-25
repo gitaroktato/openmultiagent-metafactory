@@ -17,6 +17,16 @@ For a Cloud scaffold, copy `.env.example` to `.env`, add the provider key, then 
 
 For an Ollama scaffold, start Ollama first and run `npm run dev`. The starter selects `OMA_MODEL` when set, otherwise the first installed model. No source files are read and agents receive no tools.
 
+## Testing and checks
+
+```bash
+npm test            # run unit tests (node --test via tsx)
+npm run typecheck   # tsc --noEmit
+npx knip            # detect unused files, dependencies, and exports
+```
+
+All three must pass before a change is considered done.
+
 ## Team agents
 
 The `hybrid-dev` team is composed of three OpenCode-backed agents: **planner**, **coder**, and **typescript-reviewer**.

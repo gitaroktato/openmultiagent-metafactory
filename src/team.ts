@@ -1,19 +1,22 @@
 import { ExternalAgentBackendConfig, TeamConfig } from '@open-multi-agent/core'
+import { OPENCODE_MODEL_ID, OTLP_ENDPOINT } from './constants'
 
 export const TEAM_NAME = 'hybrid-dev'
+
+const USER_ID = process.env.USER ?? 'unknown'
 
 export function createAcpBackendConfig(sessionId: string): ExternalAgentBackendConfig {
   return {
     kind: 'acp',
     command: 'opencode',
     env: {
-      "OPENCODE_MODEL": "unsloth-studio/unsloth/Qwen3.8-27B-GGUF#medium",
+      "OPENCODE_MODEL": OPENCODE_MODEL_ID,
       "OPENCODE_ENABLE_TELEMETRY": "1",
-      "OPENCODE_OTLP_ENDPOINT": "http://localhost:4317",
+      "OPENCODE_OTLP_ENDPOINT": OTLP_ENDPOINT,
       "OPENCODE_OTLP_PROTOCOL": "grpc",
       "OPENCODE_OTLP_HEADERS": "x-project-name=default",
       // Example of controlling sessionID and userID for ACP delegated calls
-      "OPENCODE_SPAN_ATTRIBUTES": `session.id=${sessionId},user.id=gitaroktato`
+      "OPENCODE_SPAN_ATTRIBUTES": `session.id=${sessionId},user.id=${USER_ID}`
     },
     args: ['acp', '--print-logs'],
     permission: 'auto-approve'
