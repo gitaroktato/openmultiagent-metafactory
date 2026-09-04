@@ -51,6 +51,10 @@ All three must pass before a change is considered done.
 
 Never apply changes on the `node_modules` folder.
 
+## Searching and navigation rules
+
+Use `rg` instead of `grep` for searching faster between files.
+
 ## Project Documentation
 
 `README.md` should contain all changes related to
