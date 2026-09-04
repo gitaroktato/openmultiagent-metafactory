@@ -1,11 +1,11 @@
 ---
 id: OMA-0015
 title: 'Refactor orchestrator entrypoint for reliability, testability, and type safety'
-status: In Progress
+status: To Do
 assignee:
   - opencode
 created_date: '2026-08-28 13:52'
-updated_date: '2026-08-28 14:02'
+updated_date: '2026-09-04 15:48'
 labels:
   - refactor
   - type-safety

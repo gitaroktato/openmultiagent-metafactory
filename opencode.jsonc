@@ -4,6 +4,7 @@
   "experimental": {
     "openTelemetry": true
   },
+  "lsp": true,
   "plugin": [
     "@devtheops/opencode-plugin-otel"
   ],
