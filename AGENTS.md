@@ -1,3 +1,6 @@
+# Open Multi-Agent metafactory
+
+A coding agent orchestrator that's building itself based on Open Multi-Agent, ACP, OpenTelemetry, Phoenix and many more.
 
 <!-- BACKLOG.MD MCP GUIDELINES START -->
 <!-- backlog.md-instructions-version: 1.50.1 -->
@@ -34,14 +37,28 @@ You MUST read the overview resource to understand the complete workflow. The inf
 
 A multi-agent orchestration demo built on `@open-multi-agent/core` (OMA). Given a `--goal` argument, a coordinator decomposes the goal into a task DAG and dispatches it to a hybrid team of three OpenCode-backed agents: **planner**, **coder**, and **reviewer**. Each agent runs as an ACP (Agent Communication Protocol) subprocess. After the team finishes, a Knip feedback loop checks for unused exports/imports and re-runs the team up to three times to fix any issues. All traces are captured via Arize Phoenix (OpenTelemetry) and a local HTML dashboard (`dashboard.html`) is rendered for every run. Session IDs are derived from Backlog.md task IDs embedded in the goal string.
 
-## Testing
-
-Run all tests with the following command
+## Testing and checks
 
 ```bash
-npm test 
+npm test            # run unit tests (node --test via tsx)
+npm run typecheck   # tsc --noEmit
+npx knip            # detect unused files, dependencies, and exports
 ```
+
+All three must pass before a change is considered done.
 
 ## Folder forbidden for editing
 
 Never apply changes on the `node_modules` folder.
+
+## Project Documentation
+
+`README.md` should contain all changes related to
+
+- Project structure and files
+- Component diagram using Mermaid diagrams
+- How to build and run the project
+- How to execute tests
+- URL samples for the Docker and API endpoints
+
+After implementation, always check if the `README.md` is up-to-date and extend it with necessary information related to the list above.
