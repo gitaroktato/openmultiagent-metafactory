@@ -46,7 +46,36 @@ backlog browser
 ### Implementing a backlog item
 
 ```bash
-npm run dev -- --goal='Implement oma-0002
+npm run dev -- --goal='Implement oma-0002'
+```
+
+### Run modes
+
+The entrypoint supports three run modes, selected via CLI flags (see `src/plan.ts`):
+
+#### Default team mode
+
+No mode flags. The coordinator decomposes the goal into a task DAG, the team executes it, and a knip feedback loop re-runs the team up to three times until knip is clean. A `dashboard.html` is rendered for every run.
+
+```bash
+npm run dev -- --goal='Implement oma-0002'
+```
+
+#### Plan-only preview (`--plan-only`)
+
+Runs the coordinator only: it decomposes the goal into a task DAG but **no task agents execute and knip is skipped**. The result is frozen as a serializable plan artifact (JSON with `version`, `goal`, and `tasks` including ids, titles, descriptions, and dependencies) written to `plan.json` by default, or to a custom path via `--plan-file <path>`. A DAG summary is printed and `dashboard.html` is still rendered from the preview result.
+
+```bash
+npm run dev -- --goal='Implement oma-0014' --plan-only
+npm run dev -- --goal='Implement oma-0014' --plan-only --plan-file preview.json
+```
+
+#### Replay (`--replay <path>`)
+
+Loads a previously saved plan artifact and executes it via `runFromPlan` **without invoking the coordinator**. The replay pins the task graph (ids, dependencies, assignees, titles, descriptions) exactly as stored, but not the outputs — agents still run and may produce different results. There is no coordinator synthesis step. After execution, knip runs once in **report-only** mode: issues are printed but there is no retry loop. `dashboard.html` is rendered for the replayed run.
+
+```bash
+npm run dev -- --goal='Implement oma-0014' --replay plan.json
 ```
 
 ## Session IDs

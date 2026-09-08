@@ -1,12 +1,16 @@
 ---
 id: OMA-0014
 title: Plan preview mode
-status: In Progress
+status: Done
 assignee: []
 created_date: '2026-08-25 09:37'
-updated_date: '2026-09-08 10:00'
+updated_date: '2026-09-08 10:33'
 labels: []
 dependencies: []
+modified_files:
+  - src/index.ts
+  - src/plan.ts
+  - README.md
 type: feature
 ordinal: 14000
 ---
@@ -27,10 +31,10 @@ Steps to take:
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 All unit tests pass
-- [ ] #2 Unit test coverage stays above 80%
-- [ ] #3 The `knip` linter shows no errors or issues to fix
-- [ ] #4 README.md documentation is updated
+- [x] #1 All unit tests pass
+- [x] #2 Unit test coverage stays above 80%
+- [x] #3 The `knip` linter shows no errors or issues to fix
+- [x] #4 README.md documentation is updated
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -68,3 +72,27 @@ Basis: https://open-multi-agent.com/reference/plan-replay/ — `runTeam(planOnly
 - `npx knip` clean.
 - README updated.
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Step 1 complete (2026-09-08): src/plan.ts implemented with parseRunModeArgs (--goal= passthrough, --plan-only, --plan-file <path>, --replay <path>; throws on conflicting flags and missing paths), savePlanArtifact/loadPlanArtifact with JSON round-trip + validation (version===1, non-empty tasks, id/title/description per task). Types from @open-multi-agent/core. Module is pure — importable without spawning agents. src/plan.test.ts added (18 tests). npm test 41/41 green, typecheck clean, knip clean.
+
+Step 2 complete (2026-09-08): src/index.ts now branches on parseRunModeArgs. plan-only mode: runTeam(planOnly:true) -> createPlanArtifact -> savePlanArtifact (default plan.json or --plan-file path), prints DAG summary, skips knip, renders dashboard.html in finally. replay mode: loadPlanArtifact -> runFromPlan (no coordinator), renders dashboard, then runs knip once report-only (no retry). Default mode unchanged (runTeam + 3-attempt knip feedback loop). Trace/sink setup and session ID derivation work for all modes; renderDashboard extracted as shared async helper. Also fixed a pre-existing eslint preserve-caught-error in src/plan.ts (JSON.parse catch now uses { cause: err }). All checks green: lint, npm test 41/41, typecheck, knip.
+
+Step 4 complete (2026-09-08): README.md extended with a 'Run modes' section under 'How to use?' documenting all three modes: default team mode (runTeam + knip feedback loop, unchanged), plan-only preview (--plan-only / --plan-file <path> — coordinator only, frozen plan.json DAG, no task agents, no knip, dashboard still rendered), and replay (--replay <path> — runFromPlan without coordinator, pins graph not outputs, no synthesis step, knip report-only). Command examples follow existing npm run dev conventions. Also fixed a pre-existing broken code fence in the 'Implementing a backlog item' example (missing closing quote/backticks). All plan steps now complete.
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Implemented plan-preview mode (OMA-0014) per the approved plan.
+
+Changes:
+- src/plan.ts (new): pure module exporting parseRunModeArgs (--goal= passthrough, --plan-only, --plan-file <path>, --replay <path>; throws on conflicting flags and missing paths), savePlanArtifact/loadPlanArtifact with JSON round-trip + validation (version===1, non-empty tasks, id/title/description per task). Importable without spawning agents.
+- src/index.ts: branches on parseRunModeArgs into three modes. Default = unchanged runTeam + 3-attempt knip feedback loop. plan-only = runTeam(planOnly:true) -> createPlanArtifact -> save to plan.json (or --plan-file), prints DAG summary, skips knip, renders dashboard.html. replay = loadPlanArtifact -> runFromPlan (no coordinator), renders dashboard, then knip once report-only (no retry). renderDashboard extracted as shared helper; trace/sink + session ID work for all modes.
+- src/plan.test.ts (new): 18 tests covering arg parsing (defaults, each flag, missing paths, both conflict orders) and validation failures (bad version, empty/non-array tasks, missing id/title/description, malformed JSON, missing file).
+- README.md: new 'Run modes' section documenting all three modes with command examples; notes replay pins the graph but not outputs and has no coordinator synthesis step. Also fixed a pre-existing broken code fence.
+
+Verification (all gates green): npm test 41/41 pass; coverage 100% lines / 100% branches / 100% funcs (>80% DoD); npm run typecheck clean; npx knip clean; npm run lint clean.
+<!-- SECTION:FINAL_SUMMARY:END -->
