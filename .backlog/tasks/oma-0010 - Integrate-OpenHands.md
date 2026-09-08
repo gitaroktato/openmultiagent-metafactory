@@ -4,7 +4,7 @@ title: Integrate OpenHands
 status: To Do
 assignee: []
 created_date: '2026-08-25 07:44'
-updated_date: '2026-08-25 09:38'
+updated_date: '2026-09-08 10:00'
 labels: []
 dependencies: []
 type: feature
@@ -25,3 +25,13 @@ https://github.com/OpenHands/OpenHands
 - [ ] #3 The `knip` linter shows no errors or issues to fix
 - [ ] #4 README.md documentation is updated
 <!-- DOD:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+created: 2026-09-08 10:00
+---
+https://github.com/OpenHands/OpenHands#quickstart
+https://github.com/OpenHands/OpenHands/blob/main/docs/README.md
+---
+<!-- COMMENTS:END -->
