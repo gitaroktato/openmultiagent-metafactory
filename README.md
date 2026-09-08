@@ -7,10 +7,18 @@ A coding agent orchestrator that's building itself based on Open Multi-Agent, AC
 ```bash
 npm test            # run unit tests (node --test via tsx)
 npm run typecheck   # tsc --noEmit
+npm run lint        # eslint . (flat config in eslint.config.js)
 npx knip            # detect unused files, dependencies, and exports
 ```
 
-All three must pass before a change is considered done.
+All four must pass before a change is considered done.
+
+### TypeScript 7 + typescript-eslint side-by-side
+
+`typescript-eslint` does not support the TS 7 native compiler (no JS API yet), so the project runs both compilers side by side via npm aliases:
+
+- `typescript` → `npm:@typescript/typescript6` (TS 6 API, used by `typescript-eslint`)
+- `@typescript/native` → `npm:typescript@^7` (native TS 7, provides the `tsc` binary used by `npm run typecheck`)
 
 ## Team agents
 
@@ -25,6 +33,7 @@ The `hybrid-dev` team is composed of three OpenCode-backed agents: **planner**, 
 - <https://www.skills.sh>
 - <https://arize.com/docs/phoenix/>
 - <https://knip.dev>
+- <https://eslint.org>
 
 ## How to use?
 
