@@ -1,15 +1,15 @@
 ---
 id: OMA-0009
 title: Add LSP support
-status: In Progress
+status: Done
 assignee:
   - opencode
 created_date: '2026-08-14 14:42'
-updated_date: '2026-09-08 09:33'
+updated_date: '2026-09-08 09:51'
 labels: []
 dependencies: []
 type: enhancement
-ordinal: 9000
+ordinal: 13000
 ---
 
 ## Description
