@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - opencode
 created_date: '2026-08-14 14:42'
-updated_date: '2026-09-04 15:09'
+updated_date: '2026-09-08 09:33'
 labels: []
 dependencies: []
 type: enhancement
@@ -57,3 +57,12 @@ Add `"lsp": true` to `opencode.jsonc`. This is a top-level config key validated 
 - Schema validation must pass after the edit (AC #1).
 - LSP startup verification (AC #2) may require a model endpoint; if unavailable, verify via `opencode lsp` listing + config-driven activation and document evidence.
 <!-- SECTION:PLAN:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+created: 2026-09-08 09:33
+---
+https://blog.konst.kiwi/neovim-with-the-typescript-language-server-lsp
+---
+<!-- COMMENTS:END -->
