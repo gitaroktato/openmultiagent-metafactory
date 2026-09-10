@@ -8,6 +8,72 @@
   "plugin": [
     "@devtheops/opencode-plugin-otel"
   ],
+  "provider": {
+    "unsloth-studio": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Unsloth Studio",
+      "options": {
+        "baseURL": "http://192.168.2.120:8888/v1",
+        "apiKey": "{env:UNSLOTH_API_KEY}"
+      },
+      "models": {
+        "unsloth/Qwen3.8-27B-GGUF#low": {
+          "name": "unsloth/Qwen3.8-27B-GGUF#low",
+          "limit": {
+            "context": 122000,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "image",
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "reasoningEffort": "low",
+          "reasoning_budget_tokens": 512
+        },
+        "unsloth/Qwen3.8-27B-GGUF#medium": {
+          "name": "unsloth/Qwen3.8-27B-GGUF#medium",
+          "limit": {
+            "context": 122000,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "image",
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "reasoningEffort": "medium",
+          "reasoning_budget_tokens": 2048
+        },
+        "unsloth/Qwen3.8-27B-GGUF#xhigh": {
+          "name": "unsloth/Qwen3.8-27B-GGUF#xhigh",
+          "limit": {
+            "context": 122000,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "image",
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "reasoningEffort": "xhigh",
+          "reasoning_budget_tokens": 8192
+        }
+      }
+    }
+  },
   "mcp": {
     "backlog": {
       "type": "local",
