@@ -5,12 +5,12 @@ export const TEAM_NAME = 'hybrid-dev'
 
 const USER_ID = process.env.USER ?? 'unknown'
 
-export function createAcpBackendConfig(sessionId: string): ExternalAgentBackendConfig {
+export function createAcpBackendConfig(sessionId: string, model_id: string = OPENCODE_MODEL_ID): ExternalAgentBackendConfig {
   return {
     kind: 'acp',
     command: 'opencode',
     env: {
-      "OPENCODE_MODEL": OPENCODE_MODEL_ID,
+      "OPENCODE_MODEL": model_id,
       "OPENCODE_ENABLE_TELEMETRY": "1",
       "OPENCODE_OTLP_ENDPOINT": OTLP_ENDPOINT,
       "OPENCODE_OTLP_PROTOCOL": "grpc",
