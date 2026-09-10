@@ -6,7 +6,7 @@ import { handleProgress } from './logger'
 import { createAcpBackend } from '@open-multi-agent/core/acp'
 import { register, traceChain } from '@arizeai/phoenix-otel';
 import { AcpBackendAdapter } from './adapter'
-import { DEFAULT_MODEL, DEFAULT_PROVIDER, PHOENIX_URL } from './constants'
+import { DEFAULT_MODEL, DEFAULT_PROVIDER, OPENCODE_MODEL_ID_LOW, OPENCODE_MODEL_ID_XHIGH, PHOENIX_URL } from './constants'
 import { createSessionId, extractBacklogId } from './session'
 import { createAcpBackendConfig, createTeamConfig, TEAM_NAME } from './team'
 import { loadPlanArtifact, parseRunModeArgs, savePlanArtifact } from './plan'
@@ -52,9 +52,10 @@ const config: OrchestratorConfig = {
 }
 
 const oma = new OpenMultiAgent(config)
-const backend = createAcpBackendConfig(CURRENT_SESSION_ID)
+const backend = createAcpBackendConfig(CURRENT_SESSION_ID, OPENCODE_MODEL_ID_LOW)
 const team = oma.createTeam(TEAM_NAME, createTeamConfig(backend))
 
+const coordinator_backend = createAcpBackendConfig(CURRENT_SESSION_ID, OPENCODE_MODEL_ID_XHIGH)
 // Create custom LLMAdapter as a coordinator
 const acpBackendInstance = createAcpBackend({ command: backend.command, args: backend.args, env: backend.env })
 const coordinatorConfig: CoordinatorConfig = {
