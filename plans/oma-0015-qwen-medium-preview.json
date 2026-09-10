@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "goal": "Implement oma-0015",
+  "tasks": [
+    {
+      "id": "693fbed3-24dd-44c0-9e36-db91cce01ec2",
+      "title": "Verify API facts and finalize file-level implementation plan for oma-0015",
+      "description": "Analyze src/index.ts, src/logger.ts, src/session.ts, src/team.ts, src/adapter.ts, and the existing plan recorded in backlog task oma-0015. Verify these API facts against node_modules/@open-multi-agent/core/dist/types.d.ts: (a) RunViewerInput.result is optional so dashboard.html can be rendered on failure paths; (b) traceChain<Fn extends AnyFn>(fn, options?) preserves the wrapped function's signature; (c) OrchestratorEvent is a single interface with 13 `type` discriminant values. Produce a final file-level plan covering: src/goal.ts (parseGoal), src/knip.ts (KnipResult discriminated union + pure runKnipFeedbackLoop with injectable deps), src/logger.ts (createProgressHandler factory with injectable clock/output), branded SessionId in src/session.ts, named constants for magic strings ('dummy-model' in src/adapter.ts, 'opencode' command in src/team.ts, '--goal=' prefix), and the rewritten src/index.ts whose single try/finally guarantees trace flush + dashboard rendering on every failure path. Constraints: no happy-path behavior change, existing tests unmodified, node_modules off-limits. Output plan only; do not edit files.",
+      "assignee": "planner"
+    },
+    {
+      "id": "8ef67488-23b5-438b-a5bf-7fefbe128bd0",
+      "title": "Extract --goal= parsing into src/goal.ts and remove dead demo script",
+      "description": "Create src/goal.ts exporting parseGoal(args: readonly string[]): string that finds the argument starting with '--goal=', slices off the prefix, and throws a descriptive error when the flag is missing or its value is empty (preserve the current error message intent from getGoalFromArgs in src/index.ts). Hoist the literal '--goal=' into an exported named constant GOAL_ARG_PREFIX. Remove the dead \"demo\" script (\"demo\": \"tsx src/index.ts --demo\") from package.json because argument parsing does not support --demo; no dead scripts may remain. Do NOT modify src/index.ts in this task (it is rewired later by the entrypoint rewrite); it is expected that parseGoal/GOAL_ARG_PREFIX are not yet imported anywhere. Verify: npm run typecheck passes.",
+      "assignee": "coder",
+      "dependsOn": [
+        "693fbed3-24dd-44c0-9e36-db91cce01ec2"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "cdfc17ca-d80b-4766-a9d1-d35a267067c8",
+      "title": "Create src/knip.ts with KnipResult discriminated union and pure feedback loop",
+      "description": "Create src/knip.ts, keeping it free of OTEL imports (tracing is applied at the composition site later). Provide: (1) KnipResult as a discriminated union { status: 'clean'; output: string } | { status: 'issues'; output: string } | { status: 'failed'; error: unknown }, replacing the old { clean: boolean; output: string } flag model; (2) type guards for each variant; (3) KNIP_MAX_RETRIES = 3 named constant; (4) buildKnipFollowUpGoal(output: string): string producing exactly the current follow-up text ('knip reported the following issues that must be fixed: \\n\\n' + output + ' \\n\\nPlease fix all reported issues.'); (5) runKnip(): KnipResult wrapping spawnSync('npx', ['knip'], { encoding: 'utf-8', shell: true }) — exit status 0 maps to clean, non-zero to issues, fatal spawn errors to failed; (6) runKnipFeedbackLoop(initial: TeamRunResult, deps: { runKnip: () => KnipResult; rerunTeam: (goal: string) => Promise<TeamRunResult>; maxRetries?: number; log?: (msg: string) => void; logError?: (msg: string) => void }): Promise<TeamRunResult> — a pure loop with injectable dependencies and an exhaustive switch over KnipResult status, preserving the exact retry semantics of the inline loop currently in src/index.ts lines 145-166 (up to 3 knip runs; re-run the team only when issues remain and retry budget is available; stop on clean or failed). Do NOT modify src/index.ts. Verify: npm run typecheck passes.",
+      "assignee": "coder",
+      "dependsOn": [
+        "693fbed3-24dd-44c0-9e36-db91cce01ec2"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "88d60570-7df5-421a-b0a0-1bc0e76a800b",
+      "title": "Refactor src/logger.ts into a testable createProgressHandler factory",
+      "description": "Refactor src/logger.ts: remove the mutable module-level startTimes Map and encapsulate per-agent start-time state in closure inside a new factory createProgressHandler(options?: { now?: () => number; logger?: { log: (msg: string) => void; warn: (msg: string) => void; error: (msg: string) => void } }) that returns an OrchestratorEvent handler. Default to Date.now and console when options are omitted. Handle all 13 OrchestratorEvent variants explicitly, keeping an assertNever default case for future additions. Use a type-only import (`import type { OrchestratorEvent }`). Preserve the existing log formats exactly: [HH:MM:SS.mmm] timestamps, AGENT START →, AGENT DONE ← with elapsed ms, the stale-start warning on duplicate agent_start, TASK START ↓ / TASK DONE ↑, MESSAGE •, and ERROR ✗ lines. Keep a default handleProgress export constructed via the factory so src/index.ts keeps working unchanged. Verify: npm run typecheck passes.",
+      "assignee": "coder",
+      "dependsOn": [
+        "693fbed3-24dd-44c0-9e36-db91cce01ec2"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "54e9d92e-c563-4edc-bb36-761e0f760d56",
+      "title": "Introduce branded SessionId and hoist magic strings into named constants",
+      "description": "In src/session.ts introduce a branded SessionId type (e.g. string & { readonly __brand: unique symbol } or an equivalent brand) and change createSessionId to return SessionId so session IDs are not interchangeable with arbitrary strings. Update src/team.ts createAcpBackendConfig to accept sessionId: SessionId; the entrypoint's CURRENT_SESSION_ID is inferred from createSessionId so src/index.ts needs no edit — do not modify src/index.ts in this task. Hoist magic strings into named exported constants: 'opencode' command in src/team.ts → OPENCODE_COMMAND, and 'dummy-model' in src/adapter.ts → DUMMY_MODEL (used in the LLMResponse model field). Behavior must remain identical; existing tests in src/session.test.ts and src/team.test.ts must keep passing unmodified. Verify: npm test and npm run typecheck pass.",
+      "assignee": "coder",
+      "dependsOn": [
+        "693fbed3-24dd-44c0-9e36-db91cce01ec2"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "d7334324-86a3-4aec-80e1-9d6c8ef67513",
+      "title": "Rewrite src/index.ts default-mode flow with guaranteed flush + dashboard",
+      "description": "Rewrite the default-mode flow in src/index.ts: import parseGoal from ./goal (replacing getGoalFromArgs), runKnip/runKnipFeedbackLoop/KNIP_MAX_RETRIES/buildKnipFollowUpGoal from ./knip, and createProgressHandler from ./logger. Apply traceChain to runKnip at the composition site (const runKnipWithTrace = traceChain(runKnip, { attributes: { 'session.id': CURRENT_SESSION_ID } })) so src/knip.ts stays OTEL-free. Wrap BOTH the initial oma.runTeam call and the knip feedback loop in a single try/finally so that on every failure path — including a throwing initial run — sink.forceFlush({ timeoutMs: 5000 }) and renderDashboard always execute (RunViewerInput.result is optional, so the dashboard renders without a result); set process.exitCode = 1 when the run or loop fails. Extract the default-mode flow into an exported function with injectable dependencies (runTeam, knip feedback loop, flushTraces, renderDashboard) so it is unit-testable without spawning subprocesses. Preserve plan-only and replay modes' behavior; replay keeps its report-only knip step using the new KnipResult union. No happy-path behavior change; existing tests must keep passing unmodified. Verify: npm test and npm run typecheck pass.",
+      "assignee": "coder",
+      "dependsOn": [
+        "8ef67488-23b5-438b-a5bf-7fefbe128bd0",
+        "cdfc17ca-d80b-4766-a9d1-d35a267067c8",
+        "88d60570-7df5-421a-b0a0-1bc0e76a800b",
+        "54e9d92e-c563-4edc-bb36-761e0f760d56"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "6c19b804-6824-4f17-97d0-3ecc0c18e179",
+      "title": "Add unit tests for goal/knip/logger/entrypoint flow and update README",
+      "description": "Add unit tests in the existing style (node --test via tsx, files named *.test.ts under src/): src/goal.test.ts — parseGoal happy path, missing-flag error, empty-value error; src/knip.test.ts — KnipResult type guards/exhaustiveness, buildKnipFollowUpGoal exact text, and runKnipFeedbackLoop with fake runTeam/runKnip dependencies covering: clean on first attempt, issues then clean, retry budget exhausted, and failed short-circuit (no subprocess spawned in any test); src/logger.test.ts — createProgressHandler with injectable clock/output covering agent_start/agent_complete elapsed-time reporting and the stale-start warning; plus an entrypoint-flow test proving that a failing initial team run still flushes traces and renders dashboard.html (acceptance criterion #1). Update README.md to document the new modules (src/goal.ts, src/knip.ts), the logger factory, the branded SessionId type, and the removed demo script. Verify: npm test, npm run typecheck, and npx knip all pass with no unused files/exports.",
+      "assignee": "coder",
+      "dependsOn": [
+        "d7334324-86a3-4aec-80e1-9d6c8ef67513"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "9d48ec86-0a46-4f71-a5be-efc49d7f3502",
+      "title": "TypeScript review of oma-0015 changes against typescript-pro constraints",
+      "description": "Read-only review of all oma-0015 changes (src/goal.ts, src/knip.ts, src/logger.ts, src/session.ts, src/team.ts, src/adapter.ts, src/index.ts, package.json, README.md) against the typescript-pro skill constraints in .agents/skills/typescript-pro/SKILL.md: strict mode, no explicit any, discriminated union instead of a boolean clean flag, branded SessionId used end-to-end from creation through team config and entrypoint consumption, type guards, import type for type-only imports, named constants for all former magic strings ('dummy-model', 'opencode' command, '--goal=' prefix). Check acceptance criteria #1-#8 and Definition of Done: npm test passes including all new tests, unit test coverage stays above 80%, npx knip reports no issues, npm run typecheck is clean, README.md is up to date. Produce review recommendations only; never edit files.",
+      "assignee": "typescript-reviewer",
+      "dependsOn": [
+        "6c19b804-6824-4f17-97d0-3ecc0c18e179"
+      ],
+      "memoryScope": "dependencies"
+    }
+  ]
+}
