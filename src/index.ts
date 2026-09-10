@@ -53,11 +53,13 @@ const config: OrchestratorConfig = {
 
 const oma = new OpenMultiAgent(config)
 const backend = createAcpBackendConfig(CURRENT_SESSION_ID, OPENCODE_MODEL_ID_LOW)
+console.log(`\nUsing backend for team: ${JSON.stringify(backend, null, 2)}`)
 const team = oma.createTeam(TEAM_NAME, createTeamConfig(backend))
 
 const coordinator_backend = createAcpBackendConfig(CURRENT_SESSION_ID, OPENCODE_MODEL_ID_XHIGH)
+console.log(`\nUsing backend for coordinator: ${JSON.stringify(coordinator_backend, null, 2)}`)
 // Create custom LLMAdapter as a coordinator
-const acpBackendInstance = createAcpBackend({ command: backend.command, args: backend.args, env: backend.env })
+const acpBackendInstance = createAcpBackend({ command: coordinator_backend.command, args: coordinator_backend.args, env: coordinator_backend.env })
 const coordinatorConfig: CoordinatorConfig = {
   adapter: new AcpBackendAdapter(acpBackendInstance)
 }
@@ -66,7 +68,7 @@ const coordinatorConfig: CoordinatorConfig = {
 const runTeamOptions: RunTeamOptions = { revealCoordinator: true, mode: 'team', coordinator: coordinatorConfig }
 
 function printPlanSummary(planArtifact: ReturnType<typeof oma.createPlanArtifact>): void {
-  console.log(`\nPlan preview — ${planArtifact.tasks.length} task(s):`)
+  console.log(`\nPlan preview — ${planArtifact.tasks.length} task(s): `)
   for (const task of planArtifact.tasks) {
     const deps = task.dependsOn?.length ? ` (depends on: ${task.dependsOn.join(', ')})` : '';
     console.log(`  - [${task.id}] ${task.title}${deps}`);
@@ -90,7 +92,7 @@ if (runMode.mode === 'plan-only') {
   // Plan-only mode: coordinator decomposes the goal, no task agents execute.
   console.log(`Previewing plan for goal - ${goal}`)
   const preview = await oma.runTeam(team, goal, { ...runTeamOptions, planOnly: true })
-  console.log(`\nRouting decision - ${JSON.stringify(preview.routingDecision, null, 2)}`)
+  console.log(`\nRouting decision - ${JSON.stringify(preview.routingDecision, null, 2)} `)
 
   try {
     const planArtifact = oma.createPlanArtifact(preview)
@@ -98,8 +100,8 @@ if (runMode.mode === 'plan-only') {
 
     const planPath = runMode.planFile ?? 'plan.json'
     savePlanArtifact(planArtifact, planPath)
-    console.log(`\nPlan artifact saved → ${planPath}`)
-    console.log(`Replay later with: npm run dev -- --goal='${goal}' --replay ${planPath}`)
+    console.log(`\nPlan artifact saved → ${planPath} `)
+    console.log(`Replay later with: npm run dev-- --goal='${goal}' --replay ${planPath} `)
   } finally {
     // Flushing traces — runs even if artifact creation fails
     await sink.forceFlush({ timeoutMs: 5_000 })
@@ -133,15 +135,15 @@ if (runMode.mode === 'plan-only') {
   }
 } else {
   // Default mode: full team run with the knip feedback loop.
-  console.log(`Executing goal - ${goal}`)
+  console.log(`Executing goal - ${goal} `)
   let result = await oma.runTeam(team, goal, runTeamOptions)
-  console.log(`\nRouting decision - ${JSON.stringify(result.routingDecision, null, 2)}`)
+  console.log(`\nRouting decision - ${JSON.stringify(result.routingDecision, null, 2)} `)
 
   try {
     // Knip feedback loop: up to KNIP_MAX_RETRIES knip runs; re-run the team only
     // when issues remain and a retry budget is still available.
     for (let attempt = 1; attempt <= KNIP_MAX_RETRIES; attempt++) {
-      console.log(`\nRunning knip (attempt ${attempt}/${KNIP_MAX_RETRIES})...`);
+      console.log(`\nRunning knip(attempt ${attempt} / ${KNIP_MAX_RETRIES})...`);
       let knip: { clean: boolean; output: string };
       try {
         knip = runKnipWithTrace();
@@ -157,10 +159,10 @@ if (runMode.mode === 'plan-only') {
         console.log(`knip: issues remain after ${KNIP_MAX_RETRIES} retries, giving up.`);
         break;
       }
-      const followUpGoal = `knip reported the following issues that must be fixed:\n\n${knip.output}\n\nPlease fix all reported issues.`;
-      console.log(`knip: issues found, feeding back to team (retry ${attempt}/${KNIP_MAX_RETRIES})...`);
+      const followUpGoal = `knip reported the following issues that must be fixed: \n\n${knip.output} \n\nPlease fix all reported issues.`;
+      console.log(`knip: issues found, feeding back to team(retry ${attempt} / ${KNIP_MAX_RETRIES})...`);
       result = await oma.runTeam(team, followUpGoal, runTeamOptions);
-      console.log(`\nRouting decision - ${JSON.stringify(result.routingDecision, null, 2)}`);
+      console.log(`\nRouting decision - ${JSON.stringify(result.routingDecision, null, 2)} `);
     }
   } finally {
     // Flushing traces — runs even if the knip loop throws
