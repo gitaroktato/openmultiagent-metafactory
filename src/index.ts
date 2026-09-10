@@ -56,7 +56,7 @@ const backend = createAcpBackendConfig(CURRENT_SESSION_ID, OPENCODE_MODEL_ID_LOW
 console.log(`\nUsing backend for team: ${JSON.stringify(backend, null, 2)}`)
 const team = oma.createTeam(TEAM_NAME, createTeamConfig(backend))
 
-const coordinator_backend = createAcpBackendConfig(CURRENT_SESSION_ID, OPENCODE_MODEL_ID_MEDIUM)
+const coordinator_backend = createAcpBackendConfig(CURRENT_SESSION_ID, OPENCODE_MODEL_ID_XHIGH)
 console.log(`\nUsing backend for coordinator: ${JSON.stringify(coordinator_backend, null, 2)}`)
 // Create custom LLMAdapter as a coordinator
 const acpBackendInstance = createAcpBackend({ command: coordinator_backend.command, args: coordinator_backend.args, env: coordinator_backend.env })

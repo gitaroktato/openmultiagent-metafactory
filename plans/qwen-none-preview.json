@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "goal": "Implement oma-0014",
+  "tasks": [
+    {
+      "id": "4565561c-23a0-41dd-879d-fe0e1a65453f",
+      "title": "Verify OMA-0014 plan-preview mode implementation",
+      "description": "Review the completed OMA-0014 implementation against its approved plan: src/plan.ts (parseRunModeArgs, savePlanArtifact, loadPlanArtifact, validatePlanArtifact), src/index.ts three-mode branching (default team + knip feedback loop, --plan-only preview via runTeam(planOnly:true) -> createPlanArtifact -> savePlanArtifact, --replay via loadPlanArtifact -> runFromPlan with report-only knip), and the README 'Run modes' section. Confirm the implementation matches the plan decisions: separate flags (--plan-only / --replay <path>), default behavior unchanged, replay pins the graph but not outputs and has no coordinator synthesis step.",
+      "assignee": "planner",
+      "priority": "normal"
+    },
+    {
+      "id": "dfa92412-adab-4014-a921-3c2f73992583",
+      "title": "Verify OMA-0014 test coverage",
+      "description": "Review src/plan.test.ts and confirm it covers: arg parsing (default mode, each flag, missing path for --replay, conflicting flags in both orders), artifact save/load round-trip, and validation failures (bad version, empty/non-array tasks, missing id/title/description, malformed JSON, missing file). Confirm tests follow the existing node:test style used elsewhere in src.",
+      "assignee": "coder",
+      "priority": "normal"
+    },
+    {
+      "id": "423b54f9-73ca-462c-94e1-dcf78ed01809",
+      "title": "Run verification gates for OMA-0014",
+      "description": "Execute the Definition of Done gates for OMA-0014: npm test (all unit tests pass, coverage above 80%), npm run typecheck (tsc --noEmit clean), npx knip (no unused files/dependencies/exports), and npm run lint. Report results; fix any failures found.",
+      "assignee": "typescript-reviewer",
+      "priority": "high"
+    },
+    {
+      "id": "32d87c8a-f3d0-4c99-8d1c-b0a5f7889967",
+      "title": "Review OMA-0014 README documentation",
+      "description": "Review the README.md 'Run modes' section added for OMA-0014. Confirm it documents all three modes (default team mode, plan-only preview, replay) with command examples following existing npm run dev conventions, and that it notes replay pins the graph but not outputs and has no coordinator synthesis step. Verify the pre-existing broken code fence fix in the 'Implementing a backlog item' example.",
+      "assignee": "planner",
+      "priority": "low"
+    }
+  ]
+}
