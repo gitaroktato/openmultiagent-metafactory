@@ -14,7 +14,6 @@
       "name": "Unsloth Studio",
       "options": {
         "baseURL": "http://192.168.2.120:8888/v1",
-        "apiKey": "{env:UNSLOTH_API_KEY}"
       },
       "models": {
         "unsloth/Qwen3.8-27B-GGUF#low": {
