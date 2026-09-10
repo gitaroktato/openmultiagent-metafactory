@@ -1,16 +1,16 @@
 import { ExternalAgentBackendConfig, TeamConfig } from '@open-multi-agent/core'
-import { OPENCODE_MODEL_ID, OTLP_ENDPOINT } from './constants'
+import { OPENCODE_MODEL_ID_MEDIUM, OTLP_ENDPOINT } from './constants'
 
 export const TEAM_NAME = 'hybrid-dev'
 
 const USER_ID = process.env.USER ?? 'unknown'
 
-export function createAcpBackendConfig(sessionId: string): ExternalAgentBackendConfig {
+export function createAcpBackendConfig(sessionId: string, model_id: string = OPENCODE_MODEL_ID_MEDIUM): ExternalAgentBackendConfig {
   return {
     kind: 'acp',
     command: 'opencode',
     env: {
-      "OPENCODE_MODEL": OPENCODE_MODEL_ID,
+      "OPENCODE_MODEL": model_id,
       "OPENCODE_ENABLE_TELEMETRY": "1",
       "OPENCODE_OTLP_ENDPOINT": OTLP_ENDPOINT,
       "OPENCODE_OTLP_PROTOCOL": "grpc",
