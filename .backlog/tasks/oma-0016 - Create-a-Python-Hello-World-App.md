@@ -1,9 +1,10 @@
 ---
 id: OMA-0016
-title: Create a Python Hello World App
+title: Create a TypeScript Hello World App
 status: To Do
 assignee: []
 created_date: '2026-09-10 13:40'
+updated_date: '2026-09-22 08:03'
 labels: []
 dependencies: []
 ordinal: 16000
@@ -12,10 +13,11 @@ ordinal: 16000
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-Create a simple Python "Hello World" app!
+Create a simple TypeScript "Hello World" app!
 
 Isolate it in a separate workspace, named `.workspace/hello_world`
-Tech stack should be managed by `uv`. No tests are necessary.
+Tech stack should be managed by `npm`. 
+No tests are necessary.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Definition of Done

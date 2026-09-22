@@ -16,8 +16,8 @@
         "baseURL": "http://192.168.2.120:8888/v1",
       },
       "models": {
-        "unsloth/Qwen3.8-27B-GGUF#low": {
-          "name": "unsloth/Qwen3.8-27B-GGUF#low",
+        "unsloth/Qwen3.8-27B-GGUF:low": {
+          "name": "unsloth/Qwen3.8-27B-GGUF:low",
           "limit": {
             "context": 122000,
             "output": 65536
@@ -36,8 +36,8 @@
             "reasoning_budget_tokens": 512
           }
         },
-        "unsloth/Qwen3.8-27B-GGUF#medium": {
-          "name": "unsloth/Qwen3.8-27B-GGUF#medium",
+        "unsloth/Qwen3.8-27B-GGUF:medium": {
+          "name": "unsloth/Qwen3.8-27B-GGUF:medium",
           "limit": {
             "context": 122000,
             "output": 65536
@@ -56,8 +56,8 @@
             "reasoning_budget_tokens": 2048
           }
         },
-        "unsloth/Qwen3.8-27B-GGUF#xhigh": {
-          "name": "unsloth/Qwen3.8-27B-GGUF#xhigh",
+        "unsloth/Qwen3.8-27B-GGUF:xhigh": {
+          "name": "unsloth/Qwen3.8-27B-GGUF:xhigh",
           "limit": {
             "context": 122000,
             "output": 65536
