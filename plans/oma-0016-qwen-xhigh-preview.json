@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "goal": "Implement oma-0016",
+  "tasks": [
+    {
+      "id": "031fedcf-2761-4e4d-8659-5832116367ed",
+      "title": "Verify environment facts and finalize file-level implementation plan for oma-0016",
+      "description": "Analyze backlog task oma-0016 (.backlog/tasks/oma-0016 - Create-a-Python-Hello-World-App.md; the filename says Python but the task title is TypeScript — follow the title: a TypeScript Hello World app) and verify these environment facts against the repo: (a) root tsconfig.json includes only src/, so .workspace/ is not typechecked by the root project and the new workspace needs its own tsconfig; (b) root knip.json currently has no ignore entries, so files under .workspace/hello_world would be reported as unused files by npx knip at the repo root unless explicitly ignored; (c) eslint.config.js lints everything except node_modules and dashboard.html, so new files must satisfy typescript-eslint recommended rules; (d) Node v24 and npm 11 are available. Produce a final file-level plan covering: .workspace/hello_world/package.json (name hello-world, private, type module, scripts build=tsc and start=node dist/index.js, devDependencies typescript + @types/node), .workspace/hello_world/tsconfig.json (strict true, target ES2022, module NodeNext, moduleResolution NodeNext, rootDir src, outDir dist, emit enabled), .workspace/hello_world/src/index.ts printing Hello World, a root knip.json ignore for .workspace/, and a README.md section. Constraints: no tests in the new workspace (task says none are necessary), do not modify root src/ files, node_modules off-limits. Output plan only; do not edit files.",
+      "assignee": "planner",
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "54223133-4ce1-4359-8bcc-8348da51fa49",
+      "title": "Scaffold npm-managed TypeScript Hello World app in .workspace/hello_world",
+      "description": "Following the finalized plan, create the isolated workspace at .workspace/hello_world: package.json (name hello-world, private, type module, engines node >=20, scripts build=tsc and start=node dist/index.js, devDependencies typescript + @types/node), tsconfig.json (strict true, target ES2022, module NodeNext, moduleResolution NodeNext, rootDir src, outDir dist, esModuleInterop, skipLibCheck, emit enabled so tsc produces dist/), and src/index.ts that prints a Hello World message to stdout. Run npm install inside .workspace/hello_world, then verify: npm run build emits dist/index.js without type errors and npm start prints the Hello World message. Do not add any tests (the task explicitly requires none) and do not modify root src/ files or root package.json.",
+      "assignee": "coder",
+      "dependsOn": [
+        "031fedcf-2761-4e4d-8659-5832116367ed"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "3e19bfab-faf5-4a0f-9ec6-418003b4cb3a",
+      "title": "Keep root checks green with the new workspace present",
+      "description": "With .workspace/hello_world in place, update root knip.json to ignore the isolated workspace (add an ignore entry for .workspace) so npx knip at the repo root reports no unused files or dependencies. Then verify at the repo root that all required checks pass: npm test (existing unit tests unmodified), npm run typecheck (root tsconfig still includes only src/), and npx knip (no issues). Also confirm npm run lint stays clean since eslint.config.js now lints the new .workspace files. Only touch root configuration files (knip.json, and eslint.config.js only if a scoped ignore is genuinely required); do not modify .workspace/hello_world sources.",
+      "assignee": "coder",
+      "dependsOn": [
+        "54223133-4ce1-4359-8bcc-8348da51fa49"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "67c4c8b7-ff9d-4c97-9f58-e95a397d007a",
+      "title": "Update README.md with the hello_world workspace",
+      "description": "Extend root README.md (following its existing structure) with a section documenting the new isolated workspace .workspace/hello_world: its purpose (simple TypeScript Hello World app, oma-0016), its file layout (package.json, tsconfig.json, src/index.ts, dist/ build output), how to build and run it (cd .workspace/hello_world && npm install && npm run build && npm start), and that it is intentionally isolated from the main project tooling with no tests. Keep the rest of the README accurate; do not remove existing sections.",
+      "assignee": "coder",
+      "dependsOn": [
+        "54223133-4ce1-4359-8bcc-8348da51fa49"
+      ],
+      "memoryScope": "dependencies"
+    },
+    {
+      "id": "dd478572-8b4a-4333-bd06-8d5c1454a781",
+      "title": "TypeScript review of oma-0016 changes against typescript-pro constraints",
+      "description": "Read-only review of all oma-0016 changes (.workspace/hello_world/package.json, .workspace/hello_world/tsconfig.json, .workspace/hello_world/src/index.ts, root knip.json, README.md) against the typescript-pro skill constraints in .agents/skills/typescript-pro/SKILL.md: strict mode enabled in the workspace tsconfig, no explicit any, idiomatic ESM module settings (NodeNext) for the compiled output, no unused locals or parameters. Check Definition of Done: npm test passes at repo root, unit test coverage requirement is not applicable because the task explicitly requires no tests in the new workspace, npx knip reports no issues at repo root, and README.md documents the new workspace. Produce review recommendations only; never edit files.",
+      "assignee": "typescript-reviewer",
+      "dependsOn": [
+        "3e19bfab-faf5-4a0f-9ec6-418003b4cb3a",
+        "67c4c8b7-ff9d-4c97-9f58-e95a397d007a"
+      ],
+      "memoryScope": "dependencies"
+    }
+  ]
+}
